@@ -127,6 +127,11 @@
                     } else {
                         window.location.href = redirectUrl;
                     }
+                } else {
+                    // No redirect URL, show success message
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    document.getElementById('messageContainer').style.display = 'flex';
+                    document.getElementById('closeButton').style.display = 'inline-block';
                 }
             }
         } catch (error) {
