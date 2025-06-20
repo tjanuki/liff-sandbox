@@ -13,6 +13,7 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::prefix('liff')->name('liff.')->group(function () {
+    Route::get('/sample', [LiffController::class, 'sample'])->name('sample');
     Route::get('/{endpointUuid}', [LiffController::class, 'show'])->name('show');
 });
 
