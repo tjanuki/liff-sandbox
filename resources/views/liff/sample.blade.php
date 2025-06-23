@@ -43,6 +43,24 @@
                 await liff.init({ liffId: liffId });
                 addDebugLog('LIFF initialization successful!');
                 
+                // Get profile if logged in
+                let profileInfo = '';
+                if (liff.isLoggedIn()) {
+                    try {
+                        const profile = await liff.getProfile();
+                        profileInfo = `
+                            <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                <h3>👋 Hello, ${profile.displayName}!</h3>
+                                <p>User ID: ${profile.userId}</p>
+                                ${profile.statusMessage ? `<p>Status: ${profile.statusMessage}</p>` : ''}
+                            </div>
+                        `;
+                        addDebugLog(`Profile loaded: ${profile.displayName}`);
+                    } catch (profileError) {
+                        addDebugLog(`Failed to get profile: ${profileError.message}`, true);
+                    }
+                }
+                
                 // Hide loading, show success
                 document.getElementById('liff-app').innerHTML = `
                     <div style="padding: 20px; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; min-height: 100vh;">
@@ -51,6 +69,8 @@
                         <p>Logged In: ${liff.isLoggedIn() ? 'Yes' : 'No'}</p>
                         <p>In Client: ${liff.isInClient() ? 'Yes' : 'No'}</p>
                         <p>OS: ${liff.getOS()}</p>
+                        
+                        ${profileInfo}
                         
                         <div style="margin-top: 30px;">
                             <button onclick="testLogin()" style="padding: 10px 20px; margin: 5px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
